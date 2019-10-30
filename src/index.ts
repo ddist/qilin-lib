@@ -1,3 +1,3 @@
-export default function hello(): void {
-  console.log("Qilin Lib v1.0.0");
+export default function hello(): string {
+  return "Qilin Lib v1.0.0";
 }
