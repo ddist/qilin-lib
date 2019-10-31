@@ -11,7 +11,7 @@
     "build": "npx tsc",
     "prepare": "npm run test && npm run build",
     "test": "jest --coverage",
-    "docs": "npx typedoc --out docs ./src"
+    "docs": "npx typedoc --out docs ./src && cp ./_config.yml ./docs/_config.yml"
   },
   "author": "Diego Perez <diego@agile.cl>",
   "license": "ISC",
