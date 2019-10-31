@@ -59,7 +59,7 @@ export abstract class Resource {
 
       return Axios.request<K>(config);
     } else {
-      throw new Error("The resource has no Qilin Client set");
+      throw new Error("The Qilin Client for this resource is undefined");
     }
   };
   /**

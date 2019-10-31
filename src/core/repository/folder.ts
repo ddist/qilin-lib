@@ -15,11 +15,31 @@ export interface IFolderResponse {
   children?: IFolderResponse[];
 }
 /**
- * Interfaces with the Folder resource in the Qilin Engine.
+ * Interface for the expected payload of Folder resources
+ */
+export interface IFolderPayload {
+  attrs?: {
+    name: string;
+  };
+  parent?: number | null;
+  children?: (
+    | {
+        id: number;
+      }
+    | {
+        name: string;
+        parent: number;
+      })[];
+}
+/**
+ * Main class for the Folder resource in the Qilin Engine.
  *
  * The Folder model implements a nested tree structure through the
  * Materialized Path strategy, so every folder resource has an *ancestry*
  * property with a subtree in the format '... /folder_id/subfolder_id/ ...' .
+ *
+ * With the folder also comes his parent folder and children, which can be both
+ * other folders or documents.
  */
 export class Folder extends Resource {
   protected _name: string;
@@ -98,8 +118,11 @@ export class Folder extends Resource {
   }
   /**
    * Creates or updates the folder
+   *
+   * @remarks Calls the inherited _save method from [[Resource]], with the corresponding
+   * template parameters.
    */
   save() {
-    return this._save<object, IFolderResponse>(this);
+    return this._save<IFolderPayload, IFolderResponse>({});
   }
 }
