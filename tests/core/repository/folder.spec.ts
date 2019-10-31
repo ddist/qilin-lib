@@ -21,3 +21,19 @@ test("Testing Folder constructor with params", () => {
   expect(folder.created_at).toStrictEqual(new Date("2019-4-5 10:00:00"));
   expect(folder.updated_at).toStrictEqual(new Date("2019-4-6 11:00:00"));
 });
+
+test("Testing Folder class setters", () => {
+  let folder = new Folder();
+  folder.name = "Test Folder";
+  folder.created_at = new Date("2019-4-5 10:00:00");
+  folder.updated_at = new Date("2019-4-6 11:00:00");
+  expect(folder.name).toBe("Test Folder");
+  expect(folder.created_at).toStrictEqual(new Date("2019-4-5 10:00:00"));
+  expect(folder.updated_at).toStrictEqual(new Date("2019-4-6 11:00:00"));
+  expect(folder.client).toBeUndefined();
+});
+
+test("Testing resource path", () => {
+  let folder = new Folder();
+  expect(folder.path).toBe("folders");
+});
