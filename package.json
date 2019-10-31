@@ -10,7 +10,8 @@
   "scripts": {
     "build": "npx tsc",
     "prepare": "npm run test && npm run build",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "docs": "npx typedoc --out docs ./src"
   },
   "author": "Diego Perez <diego@agile.cl>",
   "license": "ISC",
@@ -19,6 +20,10 @@
     "codecov": "^3.6.1",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "axios": "^0.19.0"
   }
 }
