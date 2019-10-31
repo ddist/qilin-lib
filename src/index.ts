@@ -1,3 +1,3 @@
 export default function hello(): string {
-  return "Qilin Lib v1.0.0";
+  return "Qilin SDK v1.0.0";
 }

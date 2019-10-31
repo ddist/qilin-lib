@@ -1,5 +1,5 @@
 {
-  "name": "qilin-lib",
+  "name": "qilin-sdk",
   "version": "1.0.0",
   "description": "A Typescript library that provides a high level interface to the Qilin Engine",
   "main": "./dist/index.js",
