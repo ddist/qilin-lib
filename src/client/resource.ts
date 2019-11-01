@@ -10,6 +10,8 @@ export abstract class Resource {
   protected _client: QilinClient | undefined;
   protected _path: string;
   protected _id: number | undefined;
+  protected _created_at: Date;
+  protected _updated_at: Date;
   /**
    * All resources must have a valid QilinClient instance that connects to
    * the backend and can handle authentication.
@@ -38,12 +40,40 @@ export abstract class Resource {
     return this._id;
   }
   /**
-   * Sets the folder id
+   * Sets the resource id
    *
    * @param _id The new resource id
    */
   set id(_id: number | undefined) {
     this._id = _id;
+  }
+  /**
+   * Returns the folder created_at property
+   */
+  get created_at() {
+    return this._created_at;
+  }
+  /**
+   * Sets the resource created_at property
+   *
+   * @param _created_at The new resource created_at property.
+   */
+  set created_at(_created_at: Date) {
+    this._created_at = _created_at;
+  }
+  /**
+   * Returns the resource updated_at property
+   */
+  get updated_at() {
+    return this._updated_at;
+  }
+  /**
+   * Sets the resource updated_at property
+   *
+   * @param _created_at The new resource updated_at property.
+   */
+  set updated_at(_updated_at: Date) {
+    this._updated_at = _updated_at;
   }
   /**
    * Low level save method for resources. It performs one of these two actions:
@@ -58,16 +88,17 @@ export abstract class Resource {
    */
   protected _save = <T, K>(payload: T): Promise<AxiosResponse<K>> => {
     if (this._client) {
+      // Calculate the endpoint for the resource
       let url = new URL(this.client.endpoint.toJSON());
       url.pathname += this._path;
       if (this.id) url.pathname += "/" + this.id.toString();
-      const config: AxiosRequestConfig = {
-        ...this._client.getXhrConfig(),
-        url: url.toJSON(),
-        method: this.id ? "PUT" : "POST",
-        data: payload
-      };
-
+      // Get base config object from the client
+      const config: AxiosRequestConfig = this._client.getXhrConfig();
+      // Add other config
+      config.url = url.toJSON();
+      config.method = this.id ? "PUT" : "POST";
+      config.data = payload;
+      // Perform the request
       return Axios.request<K>(config);
     } else {
       throw new Error("The Qilin Client for this resource is undefined");
@@ -83,21 +114,22 @@ export abstract class Resource {
    */
   protected _destroy = <K>(): Promise<AxiosResponse<K>> => {
     if (this._client) {
+      // Calculate the endpoint for the resource
       let url = new URL(this.client.endpoint.toJSON());
       url.pathname += this._path;
       if (this.id) {
         url.pathname += "/" + this.id.toString();
       } else {
         throw new Error(
-          "The resource hasn't been persisted so it can't be destroyed"
+          "The resource hasn't been persisted yet so it can't be destroyed"
         );
       }
-      const config: AxiosRequestConfig = {
-        ...this._client.getXhrConfig(),
-        url: url.toJSON(),
-        method: "DELETE"
-      };
-
+      // Get base config object from the client
+      const config: AxiosRequestConfig = this._client.getXhrConfig();
+      // Add other config
+      config.url = url.toJSON();
+      config.method = "DELETE";
+      // Perform the request
       return Axios.request<K>(config);
     } else {
       throw new Error("The Qilin Client for this resource is undefined");

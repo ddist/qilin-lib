@@ -1,5 +1,6 @@
 import { Resource } from "../../client/resource";
 import { QilinClient } from "../../client/client";
+import { Document, IDocumentResponse } from "./document";
 
 /**
  * Interface for the API response of Folder resources
@@ -13,6 +14,7 @@ export interface IFolderResponse {
   updated_at: string;
   parent?: IFolderResponse;
   children?: IFolderResponse[];
+  documents?: IDocumentResponse[];
 }
 /**
  * Interface for the expected payload of Folder resources
@@ -43,25 +45,28 @@ export interface IFolderPayload {
  */
 export class Folder extends Resource {
   protected _name: string;
-  protected _created_at: Date;
-  protected _updated_at: Date;
+
   protected _parent: Folder;
   protected _children: Folder[];
+  protected _documents: Document[];
   /**
    * Class constructor
    *
    * @param folder Optional constructor argument
+   * @param client QilinClient instance for backend interaction
    */
   constructor(folder?: IFolderResponse, client?: QilinClient) {
     super(client);
     this._path = "folders";
 
     if (folder) {
-      this._id = folder.id;
-      this._name = folder.name;
-      this._created_at = new Date(folder.created_at);
-      this._updated_at = new Date(folder.updated_at);
+      this.id = folder.id;
+      this.name = folder.name;
+      this.created_at = new Date(folder.created_at);
+      this.updated_at = new Date(folder.updated_at);
+      // Create the parent folder object
       if (folder.parent) this._parent = new Folder(folder.parent);
+      // Create all children folder objects
       if (folder.children) {
         this._children = folder.children.map(
           (child: IFolderResponse): Folder => {
@@ -69,9 +74,17 @@ export class Folder extends Resource {
           }
         );
       }
+      // Create all children document objects
+      if (folder.documents) {
+        this._documents = folder.documents.map(
+          (doc: IDocumentResponse): Document => {
+            return new Document(doc);
+          }
+        );
+      }
     } else {
-      this._created_at = new Date();
-      this._updated_at = new Date();
+      this.created_at = new Date();
+      this.updated_at = new Date();
     }
   }
   /**
@@ -87,34 +100,6 @@ export class Folder extends Resource {
    */
   set name(_name: string) {
     this._name = _name;
-  }
-  /**
-   * Returns the folder created_at property
-   */
-  get created_at() {
-    return this._created_at;
-  }
-  /**
-   * Sets the folder created_at property
-   *
-   * @param _created_at The new folder created_at property.
-   */
-  set created_at(_created_at: Date) {
-    this._created_at = _created_at;
-  }
-  /**
-   * Returns the folder updated_at property
-   */
-  get updated_at() {
-    return this._updated_at;
-  }
-  /**
-   * Sets the folder updated_at property
-   *
-   * @param _created_at The new folder updated_at property.
-   */
-  set updated_at(_updated_at: Date) {
-    this._updated_at = _updated_at;
   }
   /**
    * Creates or updates the folder
