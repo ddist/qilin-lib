@@ -119,10 +119,19 @@ export class Folder extends Resource {
   /**
    * Creates or updates the folder
    *
-   * @remarks Calls the inherited _save method from [[Resource]], with the corresponding
+   * @remarks Calls the inherited _save method from Resource, with the corresponding
    * template parameters.
    */
   save() {
     return this._save<IFolderPayload, IFolderResponse>({});
+  }
+  /**
+   * Destroys the folder
+   *
+   * @remarks Calls the inherited _destroy method from Resource, with the corresponding
+   * template parameters.save
+   */
+  destroy() {
+    return this._destroy<IFolderResponse>();
   }
 }
