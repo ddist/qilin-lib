@@ -147,4 +147,12 @@ export abstract class Resource {
    * @remarks Must be implemented by classes extending this class
    */
   abstract destroy(): any;
+  /**
+   * Returns true if the resource are of the same kind and have the same ID
+   *
+   * @param res Any instance of a class extending the Resource class
+   */
+  equals = (res: Resource): boolean => {
+    return this.path == res.path && this.id == res.id;
+  };
 }
