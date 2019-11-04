@@ -45,7 +45,6 @@ export interface IFolderPayload {
  */
 export class Folder extends Resource {
   protected _name: string;
-
   protected _parent: Folder;
   protected _children: Folder[];
   protected _documents: Document[];
@@ -100,6 +99,49 @@ export class Folder extends Resource {
    */
   set name(_name: string) {
     this._name = _name;
+  }
+  /**
+   * Returns the folder's parent
+   */
+  get parent() {
+    return this._parent;
+  }
+  /**
+   * Sets the folder parent
+   */
+  set parent(parent: Folder) {
+    if (this.equals(parent)) throw new Error("Folder tree cannot have loops");
+    this._parent = parent;
+  }
+  /**
+   * Returns the folder children
+   */
+  get children() {
+    return this._children;
+  }
+  /**
+   * Sets the folder children
+   */
+  set children(children: Folder[]) {
+    if (
+      children.filter(child => {
+        return this.equals(child);
+      }).length > 0
+    )
+      throw new Error("Folder tree cannot have loops");
+    this._children = children;
+  }
+  /**
+   * Returns the folder documents
+   */
+  get documents() {
+    return this._documents;
+  }
+  /**
+   * Sets the folder documents
+   */
+  set documents(docs: Document[]) {
+    this._documents = docs;
   }
   /**
    * Creates or updates the folder
